@@ -9,6 +9,7 @@ export interface SimpleSSHDeployConfig {
         port?: number;
         username?: string;
         password?: string;
+        [key: string]: any;
     };
     localFiles?: string | string[];
     remotePath?: string;
@@ -128,9 +129,9 @@ function execCommand(sshClient: Client, command: string): Promise<void> {
                 }
             });
 
-            stream.on('data', data => logger(data.toString()));
+            stream.on('data', (data: Buffer) => logger(data.toString()));
 
-            stream.stderr.on('data', data => (errorData += data));
+            stream.stderr.on('data', (data: Buffer) => (errorData += data));
         });
     });
 }
@@ -192,7 +193,7 @@ async function createDirIfNeeded(sftp: SFTPWrapper, remoteDirPath: string): Prom
     }
 }
 
-function resolveFilePaths(localFiles, remotePath): Promise<DeployFilePath[]> {
+function resolveFilePaths(localFiles: string | string[], remotePath: string): Promise<DeployFilePath[]> {
     return new Promise((resolve, reject) => {
         if (typeof localFiles === 'string') {
             glob(localFiles, { absolute: true }, (error, files) => {

@@ -4,6 +4,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "lib": ["es2018"],
+    "noImplicitAny": true,
     "outDir": "dist",
     "declaration": true
   },
